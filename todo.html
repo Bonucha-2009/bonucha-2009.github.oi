@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vazifalar — Mushtaribonu Azimova</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a24;
+    --accent: #c8f04a;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --border: rgba(200,240,74,0.15);
+    --danger: #ff6b6b;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 24px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  header {
+    margin-bottom: 40px;
+  }
+
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  h1 span { color: var(--accent); }
+
+  .stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+  }
+  .stat {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .stat strong { color: var(--accent); }
+
+  /* Input */
+  .input-area {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 2px;
+  }
+  input[type="text"]::placeholder { color: var(--muted); }
+  input[type="text"]:focus { border-color: var(--accent); }
+
+  .add-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 14px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .add-btn:hover { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+  .filter-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .filter-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  /* Todo list */
+  .todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .todo-item {
+    background: var(--surface);
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    transition: all 0.3s;
+    animation: slideIn 0.3s ease;
+    border-radius: 2px;
+  }
+  .todo-item:hover { border-color: var(--border); }
+  .todo-item.done { opacity: 0.5; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .check-btn {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    border-radius: 50%;
+    font-size: 12px;
+  }
+  .check-btn:hover { border-color: var(--accent); }
+  .todo-item.done .check-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .todo-text {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: all 0.2s;
+  }
+  .todo-item.done .todo-text {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .todo-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 8px;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  .delete-btn:hover { color: var(--danger); }
+
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .empty-icon { font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5; }
+  .empty p { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.05em; }
+
+  /* Clear done */
+  .bottom-bar {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .clear-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+  .clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+  footer {
+    margin-top: 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.08em;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-label">Mushtaribonu Azimova</div>
+    <h1>Vazifalar<br><span>Ro'yxati</span></h1>
+    <div class="stats">
+      <div class="stat">Jami: <strong id="totalCount">0</strong></div>
+      <div class="stat">Bajarildi: <strong id="doneCount">0</strong></div>
+      <div class="stat">Qoldi: <strong id="leftCount">0</strong></div>
+    </div>
+  </header>
+
+  <div class="input-area">
+    <input type="text" id="todoInput" placeholder="Yangi vazifa yozing..." maxlength="100">
+    <button class="add-btn" onclick="addTodo()">+ Qo'shish</button>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">Hammasi</button>
+    <button class="filter-btn" onclick="setFilter('active', this)">Bajarilmagan</button>
+    <button class="filter-btn" onclick="setFilter('done', this)">Bajarilgan</button>
+  </div>
+
+  <div class="todo-list" id="todoList"></div>
+
+  <div class="bottom-bar">
+    <button class="clear-btn" onclick="clearDone()">Bajarilganlarni o'chirish</button>
+  </div>
+
+  <footer>
+    <a href="https://bonucha-2009.github.io/portfolio.html">← Portfolioga qaytish</a>
+  </footer>
+</div>
+
+<script>
+  let todos = JSON.parse(localStorage.getItem('todos') || '[]');
+  let filter = 'all';
+
+  function saveTodos() {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }
+
+  function getDate() {
+    const now = new Date();
+    return now.toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit' });
+  }
+
+  function addTodo() {
+    const input = document.getElementById('todoInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    todos.unshift({
+      id: Date.now(),
+      text,
+      done: false,
+      date: getDate()
+    });
+
+    input.value = '';
+    saveTodos();
+    render();
+  }
+
+  function toggleTodo(id) {
+    const todo = todos.find(t => t.id === id);
+    if (todo) todo.done = !todo.done;
+    saveTodos();
+    render();
+  }
+
+  function deleteTodo(id) {
+    todos = todos.filter(t => t.id !== id);
+    saveTodos();
+    render();
+  }
+
+  function clearDone() {
+    todos = todos.filter(t => !t.done);
+    saveTodos();
+    render();
+  }
+
+  function setFilter(f, btn) {
+    filter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  function render() {
+    const list = document.getElementById('todoList');
+    const total = todos.length;
+    const done = todos.filter(t => t.done).length;
+
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('doneCount').textContent = done;
+    document.getElementById('leftCount').textContent = total - done;
+
+    let filtered = todos;
+    if (filter === 'active') filtered = todos.filter(t => !t.done);
+    if (filter === 'done') filtered = todos.filter(t => t.done);
+
+    if (filtered.length === 0) {
+      list.innerHTML = `
+        <div class="empty">
+          <span class="empty-icon">📋</span>
+          <p>${filter === 'done' ? 'Hali bajarilgan vazifa yo\'q' : 'Vazifalar yo\'q — birini qo\'shing!'}</p>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = filtered.map(todo => `
+      <div class="todo-item ${todo.done ? 'done' : ''}">
+        <button class="check-btn" onclick="toggleTodo(${todo.id})">
+          ${todo.done ? '✓' : ''}
+        </button>
+        <span class="todo-text">${todo.text}</span>
+        <span class="todo-date">${todo.date}</span>
+        <button class="delete-btn" onclick="deleteTodo(${todo.id})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  // Enter tugmasi bilan qo'shish
+  document.getElementById('todoInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') addTodo();
+  });
+
+  render();
+</script>
+</body>
+</html>
